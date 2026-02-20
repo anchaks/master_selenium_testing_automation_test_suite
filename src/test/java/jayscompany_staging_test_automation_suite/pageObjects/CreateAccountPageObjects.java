@@ -21,7 +21,7 @@ public class CreateAccountPageObjects
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath="//div[@class='page-title-wrapper ']//h1") WebElement createAccountPageTitle;
+    @FindBy(xpath="//div//h1[@class='page-title']") WebElement createAccountPageTitle;
     //verify that this field is present in the create account page
     public boolean isCreateAccountPageTitleDisplayed()
     {
@@ -94,7 +94,7 @@ public class CreateAccountPageObjects
         telephoneField.sendKeys(telephone);
     }
 
-    public void enterStreetAddress1(String streetAddress1)
+    public void enterStreetAddress(String streetAddress1)
     {
         wait.until(ExpectedConditions.visibilityOf(streetAddress1Field));
         streetAddress1Field.clear();
@@ -112,6 +112,15 @@ public class CreateAccountPageObjects
         postCodeField.clear();
         postCodeField.sendKeys(postCode);
     }
+
+    public void enterZipCode(String zipCode)
+    {
+        wait.until(ExpectedConditions.visibilityOf(postCodeField));
+        postCodeField.clear();
+        postCodeField.sendKeys(zipCode);
+    }
+
+
     public void enterEmailAddress(String emailAddress)
     {
         wait.until(ExpectedConditions.visibilityOf(emailAddressField));
@@ -126,9 +135,38 @@ public class CreateAccountPageObjects
     }
     public void enterConfirmPassword(String confirmPassword)
     {
-        wait.until(ExpectedConditions.visibilityOf(confirmPasswordField));
-        confirmPasswordField.clear();
-        confirmPasswordField.sendKeys(confirmPassword);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            // Try to find and fill the confirm password field
+            WebDriverWait shortWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+            
+            // Scroll down to ensure field is in view
+            ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 300);");
+            
+            shortWait.until(ExpectedConditions.presenceOfElementLocated(
+                org.openqa.selenium.By.xpath("//input[@id='password_confirmation']")
+            ));
+            
+            confirmPasswordField.clear();
+            confirmPasswordField.sendKeys(confirmPassword);
+        } catch (Exception e) {
+            // If primary locator fails, try alternative locators
+            try {
+                WebElement altField = driver.findElement(
+                    org.openqa.selenium.By.xpath("//input[contains(@name, 'confirmation')]")
+                );
+                altField.clear();
+                altField.sendKeys(confirmPassword);
+            } catch (Exception ex) {
+                // Log the error and continue
+                System.err.println("Failed to locate confirm password field: " + ex.getMessage());
+                throw new RuntimeException("Confirm password field not found", ex);
+            }
+        }
     }
 
     //method to check password strength meter is displayed and get the strength level

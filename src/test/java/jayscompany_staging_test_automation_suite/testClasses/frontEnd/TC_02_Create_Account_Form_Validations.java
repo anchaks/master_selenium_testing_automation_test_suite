@@ -72,7 +72,7 @@ public class TC_02_Create_Account_Form_Validations extends BaseClass
         createAccountPage.enterFirstName("John");
         createAccountPage.enterLastName("Doe");
         createAccountPage.enterTelephone("1234567890");
-        createAccountPage.enterStreetAddress1("123 Test St");
+        createAccountPage.enterStreetAddress("123 Test St");
         createAccountPage.enterCity("Test City");
         createAccountPage.enterPostCode("12345");
         createAccountPage.enterEmailAddress("john.doe@example.com");

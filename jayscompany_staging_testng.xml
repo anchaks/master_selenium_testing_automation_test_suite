@@ -6,6 +6,7 @@
 	</listeners>
 	<test name="Functional Tests">
 		<classes>
+			<class name="jayscompany_staging_test_automation_suite.testClasses.frontEnd.TC_01_Create_Account"/>
 			<class name="jayscompany_staging_test_automation_suite.testClasses.frontEnd.TC_03_Login"/>
 			<class name="jayscompany_staging_test_automation_suite.testClasses.frontEnd.TC_07_QuickRegisteredUsercheckout"/>
 		</classes>

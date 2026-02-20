@@ -75,14 +75,21 @@ public class HomePageObjects
     //xpath for the modal popup block
     @FindBy(xpath="//div[@id='popup-modal-spire-login']") WebElement modalPopupBlock;
     @FindBy(xpath="//input[@id='create_magento_account']") WebElement createAccountRadioButton;
+    @FindBy(xpath="//label[@for='create_magento_account']") WebElement createAccountRadioButtonLabel;
     @FindBy(xpath="//input[@id='spire_account']") WebElement loginUsingExistingAccountRadioButton;
     @FindBy(xpath="//span[normalize-space()='Continue']") WebElement continueButtonInModalPopup;    
 
     public void clickCreateAccountRadioButtonInModalPopup()
     {
         wait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
-        wait.until(ExpectedConditions.elementToBeClickable(createAccountRadioButton));
-        createAccountRadioButton.click();
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(createAccountRadioButtonLabel));
+            createAccountRadioButtonLabel.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", createAccountRadioButtonLabel);
+        }
+        wait.until(ExpectedConditions.elementSelectionStateToBe(createAccountRadioButton, true));
+
     }
 
     //click the login using existing account radio button when the modal popup appears after click the sign in link
@@ -96,8 +103,15 @@ public class HomePageObjects
     //click the continue button in the modal popup
     public void clickContinueButtonInModalPopup()
     {
-        wait.until(ExpectedConditions.elementToBeClickable(continueButtonInModalPopup));
-        continueButtonInModalPopup.click();
+        //wait.until(ExpectedConditions.elementToBeClickable(continueButtonInModalPopup));
+        //continueButtonInModalPopup.click();
+
+        try {
+            wait.until(ExpectedConditions.visibilityOf(continueButtonInModalPopup));
+            continueButtonInModalPopup.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", continueButtonInModalPopup);
+        }
     }
 
     //locator for the top menu items
@@ -138,5 +152,5 @@ public class HomePageObjects
         contactMenuItem.click();
     }
 
-
+    
 }
