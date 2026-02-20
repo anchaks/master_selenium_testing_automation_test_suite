@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Login Test Suite" parallel="false">
+
+    <!-- Listeners -->
+    <listeners>
+        <listener class-name="login_tests_automation_suite.utilities.ExtentReportManager"/>
+	</listeners>
+
+    <!-- Test Configuration -->
+    <test name="Login Chrome Test Suite">
+        <!--<parameter name="os" value="windows" />-->
+        <parameter name="browser" value="chrome" />
+        <classes>
+            <!-- Add your test classes here -->
+            <class name="login_tests_automation_suite.testClasses.TC_001_Login" />
+            <class name="login_tests_automation_suite.testClasses.TC_login_WrongUserName" />
+            <class name="login_tests_automation_suite.testClasses.TC_login_WrongPassword" />
+        </classes>
+    </test>
+</suite>
