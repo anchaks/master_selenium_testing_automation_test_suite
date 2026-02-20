@@ -13,7 +13,7 @@ mvn clean test -Dsurefire.suiteXmlFiles=loginTest_testng.xml
 ### Run Jays Company Front-End Suite
 
 ```bash
-mvn clean test -Dsurefire.suiteXmlFiles=jayscompany_staging_tesntng.xml
+mvn clean test -Dsurefire.suiteXmlFiles=jayscompany_staging_testng.xml
 ```
 
 ## Run Individual Tests
