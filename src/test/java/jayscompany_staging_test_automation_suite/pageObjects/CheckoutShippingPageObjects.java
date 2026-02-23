@@ -55,6 +55,26 @@ public class CheckoutShippingPageObjects
 
     
     
+    //locator for new address button and action method to click on it
+    @FindBy(xpath="//button[@class='action action-show-popup']") WebElement newAddressButton;
 
+    public void clickNewAddressButton()
+    {
+        wait.until(ExpectedConditions.elementToBeClickable(newAddressButton));
+        newAddressButton.click();
+    }
+
+    //form appears after clicking new address button, locators and action methods to fill the form and save the new address
+
+    @FindBy(xpath="//div[@name='shippingAddress.company']//div[@class='control']//input") WebElement companyNameFieldInNewAddressForm;
+
+    public void enterCompanyNameInNewAddressForm(String companyName)
+    {
+        wait.until(ExpectedConditions.visibilityOf(companyNameFieldInNewAddressForm));
+        companyNameFieldInNewAddressForm.sendKeys(companyName);
+    }
+
+    @FindBy(xpath="//div[@name='shippingAddress.street.0']//div[@class='control']//input") WebElement streetAddressFieldInNewAddressForm;
+    
 
 }

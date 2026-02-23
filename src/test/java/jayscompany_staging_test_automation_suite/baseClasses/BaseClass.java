@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -73,8 +74,29 @@ public class BaseClass implements DriverProvider
             e.printStackTrace();
         }
 
-        // Initialize the Chrome browser driver
-        driver = new ChromeDriver();
+        // Initialize the Chrome browser driver in headless mode
+        String mode = properties.getProperty("execution_mode");
+
+        ChromeOptions options = new ChromeOptions();
+
+        if ("headless".equalsIgnoreCase(mode)) 
+        {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--window-size=1920,1080");
+            
+            log.info("Running in headless mode");
+        } 
+        else 
+        {
+            log.info("Running in headed mode");
+        }
+
+        driver = new ChromeDriver(options);
+        driver.manage().deleteAllCookies();
+        //driver = new ChromeDriver();
         // Maximize the browser window
         driver.manage().window().maximize();
         // Clear all cookies to ensure a clean session

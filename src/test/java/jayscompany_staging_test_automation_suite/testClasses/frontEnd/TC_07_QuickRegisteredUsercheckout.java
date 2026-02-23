@@ -213,7 +213,7 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         }
 
         //enter purchase order number, order name and order notes
-        String poNumber="PO123458";
+        String poNumber="PO123457";
         checkoutReviewAndPaymentsPage.enterPurchaseOrderNumber(poNumber);
         log.info("Entered Purchase Order Number: {}", poNumber);
         String orderName="Test Order";
