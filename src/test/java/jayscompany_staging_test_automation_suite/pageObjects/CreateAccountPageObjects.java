@@ -220,6 +220,20 @@ public class CreateAccountPageObjects
     }
     
 
+    //duplicate account information error message
+    @FindBy(xpath="//div[@class='message-error error message']//div[@class='content']") WebElement duplicateAccountErrorMessage;
+    public boolean isDuplicateAccountErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(duplicateAccountErrorMessage));
+        return duplicateAccountErrorMessage.isDisplayed();
+    }
+
+    public String getDuplicateAccountErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(duplicateAccountErrorMessage));
+        return duplicateAccountErrorMessage.getText();
+    }
+
     //blank validation error messages
     @FindBy(xpath="//div[@id='spire_company_name-error']") WebElement companyNameBlankErrorMessage;
     @FindBy(xpath="//div[@id='firstname-error']") WebElement firstNameBlankErrorMessage;

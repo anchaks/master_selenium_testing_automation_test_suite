@@ -87,6 +87,14 @@ public class TC_01_Create_Account extends BaseClass
         createAccountPage.clickCreateAccountButton();
         log.info("Clicked on Create Account button");
 
+        //check if duplicate account error message is displayed, if yes, log the error and return else go ahead with verification of account creation
+        if(createAccountPage.isDuplicateAccountErrorMessageDisplayed())
+        {
+            String errorMessage=createAccountPage.getDuplicateAccountErrorMessage();
+            log.error("Create Account Failed: {}", errorMessage);
+            return;
+        }
+        
          // Verify that the account was created successfully by checking for a success message or redirection
          //if account dashboard is displayed, get the contact information text and verify the email
          AccountPageObjects accountPage=new AccountPageObjects(driver);
