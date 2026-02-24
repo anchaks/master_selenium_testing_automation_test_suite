@@ -216,8 +216,8 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         }
 
         //enter purchase order number, order name and order notes
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String poNumber="Test_Order_" + timestamp;
+        String poDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String poNumber="Test_Order_" + poDate;
         checkoutReviewAndPaymentsPage.enterPurchaseOrderNumber(poNumber);
         log.info("Entered Purchase Order Number: {}", poNumber);
         String orderName="Test Order";
@@ -242,7 +242,6 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
 
         log.info("Current URL: {}", driver.getCurrentUrl());
 
-        log.info("Current URL: {}", driver.getCurrentUrl());
         String orderConfirmationMessage=checkoutReviewAndPaymentsPage.getOrderConfirmationMessageText();
         log.info("Order Confirmation Message: {}", orderConfirmationMessage);
         String orderNumber=checkoutReviewAndPaymentsPage.getOrderNumberText();

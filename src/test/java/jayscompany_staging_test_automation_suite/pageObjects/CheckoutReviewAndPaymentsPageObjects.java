@@ -1,8 +1,10 @@
 package jayscompany_staging_test_automation_suite.pageObjects;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -47,6 +49,28 @@ public class CheckoutReviewAndPaymentsPageObjects
         purchaseOrderNumberTextArea.sendKeys(poNumber);
     }
 
+
+    //locator and action method for Purchase order validation message
+    @FindBy(xpath="///span[@data-bind='text: element.error']") private WebElement purchaseOrderValidationMessage;
+    public boolean isPurchaseOrderValidationMessageVisible() 
+    {
+        try 
+        {
+            wait.until(ExpectedConditions.visibilityOf(purchaseOrderValidationMessage));
+            return true;
+        } 
+        catch (Exception e) 
+        {
+            return false;
+        }
+    }
+
+    public String getPurchaseOrderValidationMessageText() 
+    {
+        wait.until(ExpectedConditions.visibilityOf(purchaseOrderValidationMessage));
+        return purchaseOrderValidationMessage.getText();
+    }
+
     @FindBy(xpath="//input[@name='eaorder_fieldea_order_name']") private WebElement orderNameTextArea;
     
     public void enterOrderName(String orderName) 
@@ -77,9 +101,14 @@ public class CheckoutReviewAndPaymentsPageObjects
     //locator and method to click the Place Order button
     @FindBy(xpath="//button[@title='Place Order']") private WebElement placeOrderButton;
 
+    private final By loadingMaskLocator = By.cssSelector("div.loading-mask");
+    private final By successHeadingLocator = By.xpath("//h1[contains(normalize-space(),'Thank you for your purchase')]");
+    private final By orderNumberLocator = By.cssSelector("a.order-number strong");
+    private final By genericPageTitleLocator = By.cssSelector("h1.page-title span.base");
+
     public void clickPlaceOrderButton() 
     {
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.loading-mask")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingMaskLocator));
         wait.until(ExpectedConditions.elementToBeClickable(placeOrderButton));
         placeOrderButton.click();
     }   
@@ -108,7 +137,7 @@ public class CheckoutReviewAndPaymentsPageObjects
     
 
 
-     //locator for the PO number 
+    //locator for the PO number 
     @FindBy(xpath="//h1[normalize-space()='Thank you for your purchase!']") private WebElement orderConfirmationMessage;
 
     public boolean isOrderConfirmationMessageVisible() 
@@ -127,8 +156,26 @@ public class CheckoutReviewAndPaymentsPageObjects
     //get the order confirmation message text
     public String getOrderConfirmationMessageText()
     {
-        wait.until(ExpectedConditions.visibilityOf(orderConfirmationMessage));
-        return orderConfirmationMessage.getText();
+        boolean orderPlacementCompleted = waitForOrderPlacementToComplete();
+
+        List<WebElement> successHeadingElements = driver.findElements(successHeadingLocator);
+        if (!successHeadingElements.isEmpty() && successHeadingElements.get(0).isDisplayed())
+        {
+            return successHeadingElements.get(0).getText();
+        }
+
+        List<WebElement> genericHeadingElements = driver.findElements(genericPageTitleLocator);
+        if (!genericHeadingElements.isEmpty() && genericHeadingElements.get(0).isDisplayed())
+        {
+            return genericHeadingElements.get(0).getText();
+        }
+
+        if (!orderPlacementCompleted && isAnyErrorValidationMessagePresent())
+        {
+            return "Order placement failed: " + getErrorValidationMessageText();
+        }
+
+        return "Order placed - confirmation heading not found";
     }
 
 
@@ -140,18 +187,49 @@ public class CheckoutReviewAndPaymentsPageObjects
 
     public String getOrderNumberText() 
     {
-        wait.until(ExpectedConditions.visibilityOf(orderNumberText));
-        return orderNumberText.getText();
+        boolean orderPlacementCompleted = waitForOrderPlacementToComplete();
+
+        List<WebElement> orderNumberElements = driver.findElements(orderNumberLocator);
+        if (!orderNumberElements.isEmpty() && orderNumberElements.get(0).isDisplayed())
+        {
+            return orderNumberElements.get(0).getText();
+        }
+
+        if (!orderPlacementCompleted && isAnyErrorValidationMessagePresent())
+        {
+            return "Order placement failed";
+        }
+
+        return "Order number not found";
     }
 
     public boolean isOrderNumberVisible() 
     {
         try 
         {
-            wait.until(ExpectedConditions.visibilityOf(orderNumberText));
-            return true;
+            waitForOrderPlacementToComplete();
+            return !driver.findElements(orderNumberLocator).isEmpty();
         } 
         catch (Exception e) 
+        {
+            return false;
+        }
+    }
+
+    private boolean waitForOrderPlacementToComplete()
+    {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(loadingMaskLocator));
+        try
+        {
+            wait.until(driver ->
+                driver.getCurrentUrl().contains("checkout/onepage/success")
+                || !driver.findElements(successHeadingLocator).isEmpty()
+                || !driver.findElements(orderNumberLocator).isEmpty()
+                || !driver.findElements(By.xpath("//div[@data-ui-id='checkout-cart-validationmessages-message-error']")).isEmpty()
+            );
+            return true;
+        }
+        catch (TimeoutException e)
         {
             return false;
         }

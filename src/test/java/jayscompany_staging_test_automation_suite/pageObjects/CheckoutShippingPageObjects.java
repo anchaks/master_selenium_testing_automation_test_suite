@@ -2,6 +2,11 @@ package jayscompany_staging_test_automation_suite.pageObjects;
 
 import java.time.Duration;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -45,15 +50,27 @@ public class CheckoutShippingPageObjects
 
     //locator and action method to click the NEXT button in shipping address section
 
-    @FindBy(xpath="//button[@class='button action continue primary']") WebElement nextButtonInShippingAddressSection;
+    private final By nextButtonInShippingAddressSectionLocator = By.xpath("(//button[@class='button action continue primary'] | //button[@data-role='opc-continue' and contains(@class,'continue')] | //div[@id='shipping-method-buttons-container']//button[contains(@class,'continue')])[1]");
+
+    @FindBy(xpath="(//button[@class='button action continue primary'] | //button[@data-role='opc-continue' and contains(@class,'continue')] | //div[@id='shipping-method-buttons-container']//button[contains(@class,'continue')])[1]") WebElement nextButtonInShippingAddressSection;
 
     public void clickNextButtonInShippingAddressSection()
     {
-        wait.until(ExpectedConditions.elementToBeClickable(nextButtonInShippingAddressSection));
-        nextButtonInShippingAddressSection.click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.loading-mask")));
+        wait.until(ExpectedConditions.visibilityOf(nextButtonInShippingAddressSection));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", nextButtonInShippingAddressSection);
+
+        try
+        {
+            wait.until(ExpectedConditions.elementToBeClickable(nextButtonInShippingAddressSectionLocator)).click();
+        }
+        catch (TimeoutException | ElementClickInterceptedException | StaleElementReferenceException e)
+        {
+            WebElement refreshedNextButton = wait.until(ExpectedConditions.presenceOfElementLocated(nextButtonInShippingAddressSectionLocator));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", refreshedNextButton);
+        }
     }
 
-    
     
     //locator for new address button and action method to click on it
     @FindBy(xpath="//button[@class='action action-show-popup']") WebElement newAddressButton;
