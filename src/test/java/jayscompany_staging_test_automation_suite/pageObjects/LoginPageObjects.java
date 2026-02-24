@@ -19,7 +19,7 @@ public class LoginPageObjects
     {
         this.driver=driver;
         PageFactory.initElements(driver, this);
-        wait=new WebDriverWait(driver, Duration.ofSeconds(300));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     @FindBy(xpath="//input[@id='email']") WebElement emailField;

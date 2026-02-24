@@ -22,13 +22,13 @@ public class HomePageObjects
     {
         this.driver=driver;
         PageFactory.initElements(driver, this);   
-        wait=new WebDriverWait(driver, Duration.ofSeconds(300));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     /* 
     private WebElement waitForVisibility(WebElement element) 
     {
-        return new WebDriverWait(driver, Duration.ofSeconds(45)).until(ExpectedConditions.visibilityOf(element));
+        return new WebDriverWait(driver, Duration.ofSeconds(30)).until(ExpectedConditions.visibilityOf(element));
     }
         */
 

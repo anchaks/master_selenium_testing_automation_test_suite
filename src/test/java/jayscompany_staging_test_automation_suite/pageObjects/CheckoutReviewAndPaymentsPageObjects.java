@@ -19,7 +19,7 @@ public class CheckoutReviewAndPaymentsPageObjects
     {
         this.driver=driver;
         PageFactory.initElements(driver, this);
-        wait=new WebDriverWait(driver, Duration.ofSeconds(300));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     //check if the ship to section is visible or not

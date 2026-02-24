@@ -25,7 +25,7 @@ public class CategoryLandingPageObjects
         this.driver=driver;
         this.actions = new Actions(driver);
         PageFactory.initElements(driver, this);
-        wait=new WebDriverWait(driver, Duration.ofSeconds(300));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
     //check for the header of the category landing page

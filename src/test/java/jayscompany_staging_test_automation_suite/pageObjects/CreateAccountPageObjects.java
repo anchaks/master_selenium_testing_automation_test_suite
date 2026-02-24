@@ -17,7 +17,7 @@ public class CreateAccountPageObjects
     public CreateAccountPageObjects(WebDriver driver)
     {
         this.driver=driver;
-        wait=new WebDriverWait(driver, java.time.Duration.ofSeconds(300));
+        wait=new WebDriverWait(driver, java.time.Duration.ofSeconds(30));
         PageFactory.initElements(driver, this);
     }
 

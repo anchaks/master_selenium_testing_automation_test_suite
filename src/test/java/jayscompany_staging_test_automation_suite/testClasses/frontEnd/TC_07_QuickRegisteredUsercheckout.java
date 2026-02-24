@@ -3,6 +3,9 @@ package jayscompany_staging_test_automation_suite.testClasses.frontEnd;
 
 
 //import org.testng.Assert;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.testng.annotations.Test;
 
 import jayscompany_staging_test_automation_suite.baseClasses.BaseClass;
@@ -213,7 +216,8 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         }
 
         //enter purchase order number, order name and order notes
-        String poNumber="PO123457";
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String poNumber="Test_Order_" + timestamp;
         checkoutReviewAndPaymentsPage.enterPurchaseOrderNumber(poNumber);
         log.info("Entered Purchase Order Number: {}", poNumber);
         String orderName="Test Order";
