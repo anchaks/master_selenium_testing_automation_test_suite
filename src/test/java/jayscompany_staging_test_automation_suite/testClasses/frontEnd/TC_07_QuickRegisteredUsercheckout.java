@@ -24,7 +24,7 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
     @Test
     public void loginTest() throws InterruptedException 
     {
-        log.info("Starting Registered User Checkout Test");
+        log.info("======Starting Quick Registered User Checkout Test======");
         
         //get original url
         String originalURL = driver.getCurrentUrl();
@@ -38,21 +38,31 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         log.info("Current URL after clicking Sign In: {}", currentURL);
 
         String email=properties.getProperty("front_end_user");
+        log.info("Using Email: {}", email);
         String password=properties.getProperty("front_end_user_password");
         
         LoginPageObjects loginPage=new LoginPageObjects(driver);
         loginPage.enterEmailAndPassword(email, password);
+        log.info("Entered Email and Password");
         loginPage.clickSignInButton();
+        log.info("Clicked Sign In Button");
 
         AccountPageObjects accountPage=new AccountPageObjects(driver);
-        Thread.sleep(2000);
-        boolean isAccountDashboardDisplayed=accountPage.isAccountDashboardSectionDisplayed();
+
+        //get the contact information text and check if welcome text is displayed
+        String contactInfoText=accountPage.getContactInformationText();
+        boolean isWelcomeTextDisplayed=accountPage.isWelcomeTextDisplayed();
+        log.info("Is Welcome Text Displayed? {}", isWelcomeTextDisplayed);
+        boolean isAddressDashboardSectionDisplayed=accountPage.isAddressDashboardSectionDisplayed();
+        log.info("Is Address Dashboard Section Displayed? {}", isAddressDashboardSectionDisplayed);
+        log.info("Current URL after login attempt: {}", driver.getCurrentUrl());
         
-        //if account dashboard is displayed, get the contact information text and verify the email
-        if(isAccountDashboardDisplayed)
+        //if on the account page, verify the email contact information and welcome text
+        if(contactInfoText.equalsIgnoreCase(email) && isWelcomeTextDisplayed && isAddressDashboardSectionDisplayed)
         {
             log.info("Account Dashboard is displayed");
-            String contactInfoText=accountPage.getContactInformationText();
+            String welcomeText=accountPage.getWelcomeText();
+            log.info("Welcome Text: {}", welcomeText);
             log.info("Contact Information Text: {}", contactInfoText);
             
             if(contactInfoText.contains(email))
@@ -68,6 +78,7 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         {
             log.error("Account Dashboard is not displayed. Login might have failed.");
         }
+
 
         accountPage.clickOnTopLogo();
         String newURL = driver.getCurrentUrl();
@@ -102,10 +113,7 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
 
         Thread.sleep(5000);
 
-        //hover over a product and click add to cart
-        //String productTitle="BLANK DIRECT THERMAL LABEL WHITE - 3-1/2 X 1 - ARXDT";
-        //categoryPage.hoverOverProductAndClickAddToCart(productTitle);
-        //categoryPage.hoverOverFirstProduct();
+        
     
         //get the SKU from the properties file
         //String productSKU=properties.getProperty("productSKU");
@@ -186,17 +194,7 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         CheckoutShippingPageObjects checkoutShippingPage=new CheckoutShippingPageObjects(driver);
         //enter shipping information and continue to payment page
         Thread.sleep(2000);
-        /* 
-        boolean isSummaryContentVisible=checkoutShippingPage.isSummaryContentSectionDisplayed();
-        if(isSummaryContentVisible)
-        {
-            log.info("Summary Content Section is displayed on Shipping Page");
-        }
-        else
-        {
-            log.error("Summary Content Section is not displayed on Shipping Page");
-        }
-        */
+        
 
         //click the NEXT button in shipping address section
         checkoutShippingPage.clickNextButtonInShippingAddressSection();
@@ -216,8 +214,8 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         }
 
         //enter purchase order number, order name and order notes
-        String poDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String poNumber="Test_Order_" + poDate;
+        String poDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMddHHmmss"));
+        String poNumber="OrderNo_" + poDateTime;
         checkoutReviewAndPaymentsPage.enterPurchaseOrderNumber(poNumber);
         log.info("Entered Purchase Order Number: {}", poNumber);
         String orderName="Test Order";
@@ -246,46 +244,8 @@ public class TC_07_QuickRegisteredUsercheckout extends BaseClass
         log.info("Order Confirmation Message: {}", orderConfirmationMessage);
         String orderNumber=checkoutReviewAndPaymentsPage.getOrderNumberText();
         log.info("PO Number: {}", orderNumber);
-        /*
-        //check of any order error is displayed
-        boolean isOrderErrorDisplayed=checkoutReviewAndPaymentsPage.isAnyErrorValidationMessagePresent();
-        if(isOrderErrorDisplayed)
-        {
-            String orderErrorMessage=checkoutReviewAndPaymentsPage.getErrorValidationMessageText();
-            log.error("Order could not be placed. Error Message: {}", orderErrorMessage);
-            Assert.fail("Order Placement Failed due to error: " + orderErrorMessage);
-        }
-        else
-        {
-            log.info("Order placed successfully without any errors and validation messages.");
-        }
-
-        //String currentUrl = driver.getCurrentUrl();
-         
-        log.info("Current URL: {}", driver.getCurrentUrl());
-        String orderConfirmationMessage=checkoutReviewAndPaymentsPage.getOrderConfirmationMessageText();
-        log.info("Order Confirmation Message: {}", orderConfirmationMessage);
-        String orderNumber=checkoutReviewAndPaymentsPage.getOrderNumberText();
-        log.info("PO Number: {}", orderNumber);
-
         
-        CheckoutOverviewPageObjects checkoutOverviewPage=new CheckoutOverviewPageObjects(driver);
-        boolean isOrderConfirmationMessageVisible=checkoutOverviewPage.isOrderConfirmationMessageVisible();
-        if(isOrderConfirmationMessageVisible)
-        {
-            String orderConfirmationMessageText=checkoutOverviewPage.getOrderConfirmationMessageText();
-            log.info("Order Confirmation Message is visible: {}", orderConfirmationMessageText);
-        }
-
-            String orderNumber=checkoutOverviewPage.getOrderNumberText();
-            log.info("PO Number: {}", orderNumber);
-        */
-
-
-
-
-
-        log.info("Quick Registered User Checkout Test Completed");
+        log.info("======Quick Registered User Checkout Test Completed=====");
     }
 
 

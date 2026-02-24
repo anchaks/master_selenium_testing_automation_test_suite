@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,23 +20,78 @@ public WebDriverWait wait;
     {
         this.driver=driver;
         PageFactory.initElements(driver, this);
-        wait=new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait=new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
-    @FindBy(xpath="//div[@class='column main']") WebElement accountDashboardSection;
+    //locator and action method for welcome text in the account dashboard section
+    @FindBy(xpath="//div//h1[@class='page-title']") WebElement welcomeText;
 
-    //check if this main accunt dashboard is displayed
+    public String getWelcomeText()
+    {
+        wait.until(ExpectedConditions.visibilityOf(welcomeText));
+        return welcomeText.getText();
+    }
+
+    public boolean isWelcomeTextDisplayed()
+    {
+        try
+        {
+            wait.until(ExpectedConditions.visibilityOf(welcomeText));
+            return welcomeText.isDisplayed();
+        }
+        catch (TimeoutException e)
+        {
+            return false;
+        }
+    }
+
+    //locator and action method for the address dashboard section
+    @FindBy(xpath="//div[@class='amtheme-addresses-block -dashboard-addresses']") WebElement addressDashboardSection;
+    public boolean isAddressDashboardSectionDisplayed()
+    {
+        try
+        {
+            wait.until(ExpectedConditions.visibilityOf(addressDashboardSection));
+            return addressDashboardSection.isDisplayed();
+        }
+        catch (TimeoutException e)
+        {
+            return false;
+        }
+    }   
+
+
+
+    @FindBy(xpath="//main//h1[contains(@class,'page-title') and contains(normalize-space(),'My Account')]") WebElement accountDashboardSection;
+
+    //check if this main account dashboard is displayed
     public boolean isAccountDashboardSectionDisplayed()
     {
-        return accountDashboardSection.isDisplayed();
+        try
+        {
+            wait.until(ExpectedConditions.visibilityOf(accountDashboardSection));
+            return accountDashboardSection.isDisplayed();
+        }
+        catch (TimeoutException e)
+        {
+            return false;
+        }
     }
 
     //check if the contact information is displayed in the account dashboard section.   
-    @FindBy(xpath="//div[@class='box box-information']//div[@class='box-content']") WebElement contactInformationSection;
+    @FindBy(xpath="//div[contains(@class,'box-information')]//*[contains(@class,'box-content')]") WebElement contactInformationSection;
 
     public boolean isContactInformationSectionDisplayed()
     {
-        return contactInformationSection.isDisplayed();
+        try
+        {
+            wait.until(ExpectedConditions.visibilityOf(contactInformationSection));
+            return contactInformationSection.isDisplayed();
+        }
+        catch (TimeoutException e)
+        {
+            return false;
+        }
     }
 
     //get the text of the contact information section

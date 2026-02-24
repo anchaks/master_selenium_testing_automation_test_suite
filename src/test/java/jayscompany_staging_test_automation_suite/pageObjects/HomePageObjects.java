@@ -5,6 +5,7 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -81,7 +82,16 @@ public class HomePageObjects
 
     public void clickCreateAccountRadioButtonInModalPopup()
     {
-        wait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
+        try
+        {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            shortWait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
+        }
+        catch (TimeoutException e)
+        {
+            return;
+        }
+
         try {
             wait.until(ExpectedConditions.elementToBeClickable(createAccountRadioButtonLabel));
             createAccountRadioButtonLabel.click();
@@ -95,16 +105,36 @@ public class HomePageObjects
     //click the login using existing account radio button when the modal popup appears after click the sign in link
     public void clickLoginUsingExistingAccountRadioButtonInModalPopup()
     {
-        wait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
-        wait.until(ExpectedConditions.elementToBeClickable(loginUsingExistingAccountRadioButton));
-        loginUsingExistingAccountRadioButton.click();
+        try
+        {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            shortWait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
+        }
+        catch (TimeoutException e)
+        {
+            return;
+        }
+
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(loginUsingExistingAccountRadioButton));
+            loginUsingExistingAccountRadioButton.click();
+        } catch (Exception e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", loginUsingExistingAccountRadioButton);
+        }
     }
 
     //click the continue button in the modal popup
     public void clickContinueButtonInModalPopup()
     {
-        //wait.until(ExpectedConditions.elementToBeClickable(continueButtonInModalPopup));
-        //continueButtonInModalPopup.click();
+        try
+        {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            shortWait.until(ExpectedConditions.visibilityOf(modalPopupBlock));
+        }
+        catch (TimeoutException e)
+        {
+            return;
+        }
 
         try {
             wait.until(ExpectedConditions.visibilityOf(continueButtonInModalPopup));

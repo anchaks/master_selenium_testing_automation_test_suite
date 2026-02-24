@@ -15,13 +15,15 @@ public class TC_01_Create_Account extends BaseClass
     @Test
     public void createAccount() throws InterruptedException
     {
+
+        log.info("=====Starting Create Account Test======");
         //get original url
         String originalURL = driver.getCurrentUrl();
         log.info("Original URL: {}", originalURL);
 
         HomePageObjects homePage = new HomePageObjects(driver);
         homePage.clickCreateAccountAfterHover();
-        log.info("modal popup opened after clicking create account link");
+        log.info("Modal popup opened after clicking create account link");
         homePage.clickCreateAccountRadioButtonInModalPopup();
         homePage.clickContinueButtonInModalPopup();
 
@@ -100,20 +102,30 @@ public class TC_01_Create_Account extends BaseClass
             // Verify that the account was created successfully by checking for a success message or redirection
             // if account dashboard is displayed, get the contact information text and verify the email
             AccountPageObjects accountPage=new AccountPageObjects(driver);
-            boolean isAccountDashboardDisplayed=accountPage.isAccountDashboardSectionDisplayed();
-            if(isAccountDashboardDisplayed)
+
+            //get the contact information text and check if welcome text is displayed
+            String contactInfoText=accountPage.getContactInformationText();
+            boolean isWelcomeTextDisplayed=accountPage.isWelcomeTextDisplayed();
+            log.info("Is Welcome Text Displayed? {}", isWelcomeTextDisplayed);
+            boolean isAddressDashboardSectionDisplayed=accountPage.isAddressDashboardSectionDisplayed();
+            log.info("Is Address Dashboard Section Displayed? {}", isAddressDashboardSectionDisplayed);
+            log.info("Current URL after login attempt: {}", driver.getCurrentUrl());
+            
+            //if on the account page, verify the email contact information and welcome text
+            if(contactInfoText.equalsIgnoreCase(email) && isWelcomeTextDisplayed && isAddressDashboardSectionDisplayed)
             {
                 log.info("Account Dashboard is displayed");
-                String contactInfoText=accountPage.getContactInformationText();
+                String welcomeText=accountPage.getWelcomeText();
+                log.info("Welcome Text: {}", welcomeText);
                 log.info("Contact Information Text: {}", contactInfoText);
-
+                
                 if(contactInfoText.contains(email))
                 {
-                    log.info("Create Account Successful: Email found in Contact Information");
+                    log.info("Create Account Successfull: Email found in Contact Information after account creation");
                 }
                 else
                 {
-                    log.error("Create Account Failed: Email not found in Contact Information");
+                    log.error("Create Account Failed: Email not found in Contact Information after account creation");
                 }
             }
             else
@@ -121,7 +133,9 @@ public class TC_01_Create_Account extends BaseClass
                 log.error("Account Dashboard is not displayed. Create Account might have failed.");
             }
         }
+        log.info("======Create Account Test Completed======");
+        
     }
     
-
+    
 }

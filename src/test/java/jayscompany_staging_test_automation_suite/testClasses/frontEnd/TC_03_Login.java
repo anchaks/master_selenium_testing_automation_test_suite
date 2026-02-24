@@ -13,7 +13,7 @@ public class TC_03_Login extends BaseClass
     @Test
     public void loginTest() 
     {
-        log.info("Starting Login Test");
+        log.info("=====Starting Login Test======");
         
         //get original url
         String originalURL = driver.getCurrentUrl();
@@ -27,20 +27,31 @@ public class TC_03_Login extends BaseClass
         log.info("Current URL after clicking Sign In: {}", currentURL);
 
         String email=properties.getProperty("front_end_user");
+        log.info("Using Email: {}", email);
         String password=properties.getProperty("front_end_user_password");
         
         LoginPageObjects loginPage=new LoginPageObjects(driver);
         loginPage.enterEmailAndPassword(email, password);
+        log.info("Entered Email and Password");
         loginPage.clickSignInButton();
+        log.info("Clicked Sign In Button");
 
         AccountPageObjects accountPage=new AccountPageObjects(driver);
-        boolean isAccountDashboardDisplayed=accountPage.isAccountDashboardSectionDisplayed();
+
+        //get the contact information text and check if welcome text is displayed
+        String contactInfoText=accountPage.getContactInformationText();
+        boolean isWelcomeTextDisplayed=accountPage.isWelcomeTextDisplayed();
+        log.info("Is Welcome Text Displayed? {}", isWelcomeTextDisplayed);
+        boolean isAddressDashboardSectionDisplayed=accountPage.isAddressDashboardSectionDisplayed();
+        log.info("Is Address Dashboard Section Displayed? {}", isAddressDashboardSectionDisplayed);
+        log.info("Current URL after login attempt: {}", driver.getCurrentUrl());
         
-        //if account dashboard is displayed, get the contact information text and verify the email
-        if(isAccountDashboardDisplayed)
+        //if on the account page, verify the email contact information and welcome text
+        if(contactInfoText.equalsIgnoreCase(email) && isWelcomeTextDisplayed && isAddressDashboardSectionDisplayed)
         {
             log.info("Account Dashboard is displayed");
-            String contactInfoText=accountPage.getContactInformationText();
+            String welcomeText=accountPage.getWelcomeText();
+            log.info("Welcome Text: {}", welcomeText);
             log.info("Contact Information Text: {}", contactInfoText);
             
             if(contactInfoText.contains(email))
@@ -57,6 +68,6 @@ public class TC_03_Login extends BaseClass
             log.error("Account Dashboard is not displayed. Login might have failed.");
         }
 
-        log.info("Login Test Completed");
+        log.info("======Login Test Completed======");
     }
 }

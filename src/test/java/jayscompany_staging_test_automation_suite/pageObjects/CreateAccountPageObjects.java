@@ -1,6 +1,7 @@
 package jayscompany_staging_test_automation_suite.pageObjects;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -221,11 +222,19 @@ public class CreateAccountPageObjects
     
 
     //duplicate account information error message
-    @FindBy(xpath="//div[@class='message-error error message']//div[@class='content']") WebElement duplicateAccountErrorMessage;
+    @FindBy(xpath="//div[contains(@class,'message-error') and contains(@class,'error') and contains(@class,'message')]//div[contains(@class,'content')]") WebElement duplicateAccountErrorMessage;
     public boolean isDuplicateAccountErrorMessageDisplayed()
     {
-        wait.until(ExpectedConditions.visibilityOf(duplicateAccountErrorMessage));
-        return duplicateAccountErrorMessage.isDisplayed();
+        try
+        {
+            WebDriverWait shortWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(5));
+            shortWait.until(ExpectedConditions.visibilityOf(duplicateAccountErrorMessage));
+            return duplicateAccountErrorMessage.isDisplayed();
+        }
+        catch (TimeoutException e)
+        {
+            return false;
+        }
     }
 
     public String getDuplicateAccountErrorMessage()
