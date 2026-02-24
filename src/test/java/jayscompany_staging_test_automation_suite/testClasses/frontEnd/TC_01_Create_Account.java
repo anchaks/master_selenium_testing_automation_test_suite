@@ -92,7 +92,7 @@ public class TC_01_Create_Account extends BaseClass
         {
             String errorMessage=createAccountPage.getDuplicateAccountErrorMessage();
             log.error("Create Account Failed: {}", errorMessage);
-            return;
+            Assert.fail("Create Account Failed due to duplicate account message: " + errorMessage);
         }
         
          // Verify that the account was created successfully by checking for a success message or redirection
