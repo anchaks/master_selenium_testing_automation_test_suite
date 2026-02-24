@@ -87,47 +87,40 @@ public class TC_01_Create_Account extends BaseClass
         createAccountPage.clickCreateAccountButton();
         log.info("Clicked on Create Account button");
 
-        //check if duplicate account error message is displayed, if yes, log the error and return else go ahead with verification of account creation
+        // If duplicate account error message is displayed, assert it and stop this flow.
+        // Otherwise, proceed with verification of successful account creation.
         if(createAccountPage.isDuplicateAccountErrorMessageDisplayed())
         {
             String errorMessage=createAccountPage.getDuplicateAccountErrorMessage();
-            log.error("Create Account Failed: {}", errorMessage);
-            Assert.fail("Create Account Failed due to duplicate account message: " + errorMessage);
-        }
-        
-         // Verify that the account was created successfully by checking for a success message or redirection
-         //if account dashboard is displayed, get the contact information text and verify the email
-         AccountPageObjects accountPage=new AccountPageObjects(driver);
-        boolean isAccountDashboardDisplayed=accountPage.isAccountDashboardSectionDisplayed();
-        if(isAccountDashboardDisplayed)
-        {
-            log.info("Account Dashboard is displayed");
-            String contactInfoText=accountPage.getContactInformationText();
-            log.info("Contact Information Text: {}", contactInfoText);
-            
-            if(contactInfoText.contains(email))
-            {
-                log.info("Create Account Successful: Email found in Contact Information");
-            }
-            else
-            {
-                log.error("Create Account Failed: Email not found in Contact Information");
-            }
+            log.warn("Duplicate account message displayed: {}", errorMessage);
+            Assert.fail("Duplicate account message displayed: " + errorMessage);
         }
         else
         {
-            log.error("Account Dashboard is not displayed. Create Account might have failed.");
+            // Verify that the account was created successfully by checking for a success message or redirection
+            // if account dashboard is displayed, get the contact information text and verify the email
+            AccountPageObjects accountPage=new AccountPageObjects(driver);
+            boolean isAccountDashboardDisplayed=accountPage.isAccountDashboardSectionDisplayed();
+            if(isAccountDashboardDisplayed)
+            {
+                log.info("Account Dashboard is displayed");
+                String contactInfoText=accountPage.getContactInformationText();
+                log.info("Contact Information Text: {}", contactInfoText);
+
+                if(contactInfoText.contains(email))
+                {
+                    log.info("Create Account Successful: Email found in Contact Information");
+                }
+                else
+                {
+                    log.error("Create Account Failed: Email not found in Contact Information");
+                }
+            }
+            else
+            {
+                log.error("Account Dashboard is not displayed. Create Account might have failed.");
+            }
         }
-       
-
-       
-        
-       
-
-        
-        
-        
-
     }
     
 
