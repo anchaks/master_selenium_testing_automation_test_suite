@@ -14,24 +14,30 @@ public class TC_02_Create_Account_Form_Validations extends BaseClass
     @Test
     public void createAccount()
     {
-        //get original url
+
+        log.info("=====STARTING CREATE ACCOUNT FORM VALIDATIONS TEST======");
+       //get original url
         String originalURL = driver.getCurrentUrl();
         log.info("Original URL: {}", originalURL);
 
         HomePageObjects homePage = new HomePageObjects(driver);
         homePage.clickCreateAccountAfterHover();
+        log.info("Modal popup opened after clicking create account link");
         homePage.clickCreateAccountRadioButtonInModalPopup();
+        homePage.clickContinueButtonInModalPopup();
+
+        String expectedURL ="https://staging-5em2ouy-3xwbb4bntbucg.us.platformsh.site/customer/account/create";
+        log.info("Expected URL for Create Account page: {}", expectedURL);
+
 
         //get current url
         String currentURL = driver.getCurrentUrl();
-        String expectedURL = currentURL + "/customer/account/create/";
-
         log.info("Current URL after clicking Create Account: {}", currentURL);
 
         CreateAccountPageObjects createAccountPage = new CreateAccountPageObjects(driver);
         
         // Verify that the URL has changed
-        if (!currentURL.equals(originalURL) && currentURL.equals(expectedURL)) {
+        if (currentURL.equalsIgnoreCase(expectedURL)) {
             log.info("Navigation to Create Account page successful.");
         } else {
             log.error("Navigation to Create Account page failed.");
@@ -46,48 +52,169 @@ public class TC_02_Create_Account_Form_Validations extends BaseClass
         //createAccountPage.clickCreateAccountButton();
         createAccountPage.scrollToAndClickCreateAccountButton();
 
-        Assert.assertTrue(createAccountPage.isCompanyNameBlankErrorMessageDisplayed(), "Company Name blank error message is not displayed.");
-        log.info("Company Name blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isFirstNameBlankErrorMessageDisplayed(), "First Name blank error message is not displayed.");
-        log.info("First Name blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isLastNameBlankErrorMessageDisplayed(), "Last Name blank error message is not displayed.");
-        log.info("Last Name blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isTelephoneBlankErrorMessageDisplayed(), "Telephone blank error message is not displayed.");
-        log.info("Telephone blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isStreetAddress1BlankErrorMessageDisplayed(), "Street Address 1 blank error message is not displayed.");
-        log.info("Street Address 1 blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isCityBlankErrorMessageDisplayed(), "City blank error message is not displayed.");
-        log.info("City blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isPostCodeBlankErrorMessageDisplayed(), "Post Code blank error message is not displayed.");
-        log.info("Post Code blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isEmailAddressBlankErrorMessageDisplayed(), "Email Address blank error message is not displayed.");
-        log.info("Email Address blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isPasswordBlankErrorMessageDisplayed(), "Password blank error message is not displayed.");
-        log.info("Password blank error message is displayed.");
-        Assert.assertTrue(createAccountPage.isConfirmPasswordBlankErrorMessageDisplayed(), "Confirm Password blank error message is not displayed.");
-        log.info("Confirm Password blank error message is displayed.");
+        //check blank submissions on clicking the create account button and get the screenshot of the error message
 
-        //now we check if password are matching or not after entering all mandatory fields
-        createAccountPage.enterCompanyName("Test Company");
-        createAccountPage.enterFirstName("John");
-        createAccountPage.enterLastName("Doe");
-        createAccountPage.enterTelephone("1234567890");
-        createAccountPage.enterStreetAddress("123 Test St");
-        createAccountPage.enterCity("Test City");
-        createAccountPage.enterPostCode("12345");
-        createAccountPage.enterEmailAddress("john.doe@example.com");
-        createAccountPage.enterPassword("Test@1234");
-        createAccountPage.enterConfirmPassword("Test@12345");
-        createAccountPage.clickCreateAccountButton();
+        log.info("====STARTING BLANK SUBMISSION VALIDATIONS FOR CREATE ACCOUNT FORM====");
 
-        String expectedPasswordErrorMessage="Please enter the same value again.";
-        String actualPasswordErrorMessage=createAccountPage.getPasswordErrorMessage();
-        Assert.assertEquals(actualPasswordErrorMessage, expectedPasswordErrorMessage, "Password mismatch error message is not as expected.");
-        log.info("Password mismatch error message is displayed as expected.");
+        String companyNameErrorText= createAccountPage.getCompanyNameErrorMessage();
+        log.info("Company Name Error Message: {}", companyNameErrorText);
+        Assert.assertTrue(createAccountPage.isCompanyNameErrorMessageDisplayed(), "Company Name blank error message is not displayed.");
+
+        String firstNameErrorText = createAccountPage.getFirstNameErrorMessage();
+        log.info("First Name Error Message: {}", firstNameErrorText);
+        Assert.assertTrue(createAccountPage.isFirstNameErrorMessageDisplayed(), "First Name blank error message is not displayed.");
         
+
+        String lastNameErrorText = createAccountPage.getLastNameErrorMessage();
+        log.info("Last Name Error Message: {}", lastNameErrorText);
+        Assert.assertTrue(createAccountPage.isLastNameErrorMessageDisplayed(), "Last Name blank error message is not displayed.");
+
+        String phoneNumberErrorText= createAccountPage.getTelephoneErrorMessage();
+        log.info("Phone Number Error Message: {}", phoneNumberErrorText);
+        Assert.assertTrue(createAccountPage.isTelephoneErrorMessageDisplayed(), "Phone Number blank error message is not displayed.");
+
+        String streetAddresErrorText= createAccountPage.getStreetAddress1ErrorMessage();
+        log.info("Street Address Error Message: {}", streetAddresErrorText);
+        Assert.assertTrue(createAccountPage.isStreetAddress1ErrorMessageDisplayed(), "Street Address blank error message is not displayed.");
+
+        String cityErrorText= createAccountPage.getCityErrorMessage();
+        log.info("City Error Message: {}", cityErrorText);
+        Assert.assertTrue(createAccountPage.isCityErrorMessageDisplayed(), "City blank error message is not displayed.");
+
+        String stateErrorText= createAccountPage.getStateErrorMessage();
+        log.info("State Error Message: {}", stateErrorText);
+        Assert.assertTrue(createAccountPage.isStateErrorMessageDisplayed(), "State blank error message is not displayed.");
+
+        String postCodeErrorText= createAccountPage.getPostCodeErrorMessage();
+        log.info("Post Code Error Message: {}", postCodeErrorText);
+        Assert.assertTrue(createAccountPage.isPostCodeErrorMessageDisplayed(), "Post Code blank error message is not displayed.");
+
+        String emailErrorText = createAccountPage.getEmailAddressErrorMessage();
+        log.info("Email Error Message: {}", emailErrorText);
+        Assert.assertTrue(createAccountPage.isEmailAddressErrorMessageDisplayed(), "Email blank error message is not displayed.");
+
+
+        String passwordErrorText= createAccountPage.getPasswordErrorMessage();
+        log.info("Password Error Message: {}", passwordErrorText);
+        Assert.assertTrue(createAccountPage.isPasswordErrorMessageDisplayed(), "Password blank error message is not displayed.");
+
+        String confirmPasswordErrorText= createAccountPage.getConfirmPasswordErrorMessage();
+        log.info("Confirm Password Error Message: {}", confirmPasswordErrorText);
+        Assert.assertTrue(createAccountPage.isConfirmPasswordErrorMessageDisplayed(), "Confirm Password blank error message is not displayed.");
+
+        log.info("====BLANK SUBMISSION VALIDATIONS FOR CREATE ACCOUNT FORM COMPLETED====");
+
+
+        log.info("==EMAIL FORMATTING VALIDATION STARTED==");
+
+        //enter invalid email and check the validation message
+        String invalidEmail=properties.getProperty("invalid_email_format");
+        log.info("Entering invalid email: {}", invalidEmail);
+        createAccountPage.enterEmailAddress(invalidEmail);
+        createAccountPage.scrollToAndClickCreateAccountButton();
+        String emailFormatErrorText = createAccountPage.getEmailAddressErrorMessage();
+        log.info("Email Format Error Message: {}", emailFormatErrorText);
+        if(createAccountPage.isEmailAddressErrorMessageDisplayed())
+        {
+            log.info("Email formatting validation is working as expected.");
+        }
+        else
+        {
+            log.error("Email formatting validation is not working.");
+            Assert.fail("Email formatting validation is not working.");
+        }
+
+        log.info("==EMAIL FORMATTING VALIDATION COMPLETED==");
+
+        log.info("==PASSWORD STRENGTH VALIDATION STARTED==");
+
+        //enter weak password and check the validation message
+        String weakPassword=properties.getProperty("weak_password");
+        log.info("Entering weak password: {}", weakPassword);
+        createAccountPage.enterPassword(weakPassword);
+        //stength meter message 
+        String passwordStrengthMeterText = createAccountPage.getPasswordStrengthLevel();
+        log.info("Password Strength Meter Text: {}", passwordStrengthMeterText);
+        //get the error message on entering weak password and verify
+        String passwordStrengthErrorText = createAccountPage.getPasswordErrorMessage();
+        log.info("Password Strength Error Message: {}", passwordStrengthErrorText);
         
+        if(passwordStrengthMeterText.equalsIgnoreCase("weak"))
+        {
+            log.info("Password strength validation is working as expected.It is showing the weak password error message: {}");
+        }
+        else
+        {
+            log.error("Password strength validation is not working.");
+            Assert.fail("Password strength validation is not working.");
+        }
+
+        String strongPassword=properties.getProperty("strong_password");
+        log.info("Entering strong password: {}", strongPassword);
+        createAccountPage.enterPassword(strongPassword);
+        passwordStrengthMeterText = createAccountPage.getPasswordStrengthLevel();
+        log.info("Password Strength Meter Text: {}", passwordStrengthMeterText);
+
+        if(passwordStrengthMeterText.equalsIgnoreCase("strong"))
+        {
+            log.info("Password strength meter is showing strong password strength as expected.");
+        }
+        else
+        {
+            log.error("Password strength meter is not showing medium password strength as expected.");
+            Assert.fail("Password strength meter is not showing medium password strength as expected.");
+        }
+
+        String mediumPassword=properties.getProperty("medium_password");
+        log.info("Entering medium password: {}", mediumPassword);
+        createAccountPage.enterPassword(mediumPassword);
+        passwordStrengthMeterText = createAccountPage.getPasswordStrengthLevel();
+        log.info("Password Strength Meter Text: {}", passwordStrengthMeterText);
+
+        if(passwordStrengthMeterText.equalsIgnoreCase("medium"))
+        {
+            log.info("Password strength meter is showing medium password strength as expected.");
+        }
+        else
+        {
+            log.error("Password strength meter is not showing medium password strength as expected.");
+            Assert.fail("Password strength meter is not showing medium password strength as expected.");
+        }
+
+        log.info("==PASSWORD STRENGTH VALIDATION COMPLETED==");
+
+        log.info("=====CONFIRM PASSWORD MATCH VALIDATION STARTED=====");
+
+        //enter password and confirm password and check whether the validation for confirm password is working or not
+        String password=properties.getProperty("front_end_user_password");
+        String nonMatchingConfirmPassword="NonMatching"+password;
+        log.info("Entering password: {}", password);
+        log.info("Entering non-matching confirm password: {}", nonMatchingConfirmPassword); 
+        createAccountPage.enterPassword(password);
+        createAccountPage.enterConfirmPassword(nonMatchingConfirmPassword);
+
+        createAccountPage.scrollToAndClickCreateAccountButton();
+        String confirmPasswordErrorText2= createAccountPage.getConfirmPasswordErrorMessage();
+        log.info("Confirm Password Error Message on non-matching passwords: {}", confirmPasswordErrorText2);
+        if(createAccountPage.isConfirmPasswordErrorMessageDisplayed())
+        {
+            log.info("Confirm password match validation is working as expected.");
+        }
+        else
+        {
+            log.error("Confirm password match validation is not working.");
+            Assert.fail("Confirm password match validation is not working.");
+        }
+
+        
+
+
+        log.info("=====CREATE ACCOUNT FORM VALIDATIONS TEST COMPLETED======");
 
     }
+
+
+        
     
 
 }

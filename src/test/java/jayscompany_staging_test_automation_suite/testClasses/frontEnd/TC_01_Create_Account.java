@@ -41,11 +41,11 @@ public class TC_01_Create_Account extends BaseClass
         createAccountPage.enterCompanyName(company_name);
         log.info("Entered Company Name: {}", company_name);
 
-        String first_name=properties.getProperty("contact_first_name2_required");
+        String first_name=properties.getProperty("contact_first_name_required");
         createAccountPage.enterFirstName(first_name);
         log.info("Entered First Name: {}", first_name);
 
-        String last_name=properties.getProperty("contact_last_name1_required");
+        String last_name=properties.getProperty("contact_last_name_required");
         createAccountPage.enterLastName(last_name);
         log.info("Entered Last Name: {}", last_name);
 
@@ -72,7 +72,7 @@ public class TC_01_Create_Account extends BaseClass
         createAccountPage.enterZipCode(zipCode);
         log.info("Entered Zip Code: {}", zipCode);
 
-        String email=properties.getProperty("email2_required");
+        String email=properties.getProperty("email_required");
         createAccountPage.enterEmailAddress(email);
         log.info("Entered Email Address: {}", email);
 

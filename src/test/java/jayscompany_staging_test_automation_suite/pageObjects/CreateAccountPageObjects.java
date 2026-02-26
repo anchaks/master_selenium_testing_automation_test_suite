@@ -44,7 +44,7 @@ public class CreateAccountPageObjects
     @FindBy(xpath="//input[@id='zip']") WebElement postCodeField;
     @FindBy(xpath="//input[@id='email_address']") WebElement emailAddressField;
     @FindBy(xpath="//input[@id='password']") WebElement passwordField;
-    @FindBy(xpath="//div[@id='password-strength-meter']") WebElement passwordStrengthMeter;
+    @FindBy(xpath="//span[@id='password-strength-meter-label']") WebElement passwordStrengthMeter;
     @FindBy(xpath="//input[@id='password_confirmation']") WebElement confirmPasswordField;
   
 
@@ -211,15 +211,6 @@ public class CreateAccountPageObjects
         createAccountButton.click();
     }
 
-    // Method to scroll to the create account button and click it
-    public void scrollToAndClickCreateAccountButton() 
-    {
-        wait.until(ExpectedConditions.visibilityOf(createAccountButton));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", createAccountButton);
-        wait.until(ExpectedConditions.elementToBeClickable(createAccountButton));
-        createAccountButton.click();
-    }
-    
 
     //duplicate account information error message
     @FindBy(xpath="//div[contains(@class,'message-error') and contains(@class,'error') and contains(@class,'message')]//div[contains(@class,'content')]") WebElement duplicateAccountErrorMessage;
@@ -244,81 +235,177 @@ public class CreateAccountPageObjects
     }
 
     //blank validation error messages
-    @FindBy(xpath="//div[@id='spire_company_name-error']") WebElement companyNameBlankErrorMessage;
-    @FindBy(xpath="//div[@id='firstname-error']") WebElement firstNameBlankErrorMessage;
-    @FindBy(xpath="//div[@id='lastname-error']") WebElement lastNameBlankErrorMessage;
-    @FindBy(xpath="//div[@id='telephone-error']") WebElement telephoneBlankErrorMessage;
-    @FindBy(xpath="//div[@id='street_1-error']") WebElement streetAddress1BlankErrorMessage;
-    @FindBy(xpath="//div[@id='city-error']") WebElement cityBlankErrorMessage;
-    @FindBy(xpath="//div[@id='zip-error']") WebElement postCodeBlankErrorMessage;
-    @FindBy(xpath="//div[@id='email_address-error']") WebElement emailAddressBlankErrorMessage;
-    @FindBy(xpath="//div[@id='password-error']") WebElement passwordBlankErrorMessage;
-    @FindBy(xpath="//div[@id='password-confirmation-error']") WebElement confirmPasswordBlankErrorMessage;
+    @FindBy(xpath="//div[@id='spire_company_name-error']") WebElement companyNameErrorMessage;
+    @FindBy(xpath="//div[@id='firstname-error']") WebElement firstNameErrorMessage;
+    @FindBy(xpath="//div[@id='lastname-error']") WebElement lastNameErrorMessage;
+    @FindBy(xpath="//div[@id='telephone-error']") WebElement telephoneErrorMessage;
+    @FindBy(xpath="//div[@id='street_1-error']") WebElement streetAddress1ErrorMessage;
+    @FindBy(xpath="//div[@id='city-error']") WebElement cityErrorMessage;
+    @FindBy(xpath="//div[@id='region_id-error']") WebElement stateErrorMessage;
+    @FindBy(xpath="//div[@id='zip-error']") WebElement postCodeErrorMessage;
+    @FindBy(xpath="//div[@id='email_address-error']") WebElement emailAddressErrorMessage;
+    @FindBy(xpath="//div[@id='password-error']") WebElement passwordErrorMessage;
+    @FindBy(xpath="//div[@id='password-confirmation-error']") WebElement confirmPasswordErrorMessage;
 
+    // Method to scroll to the create account button and click it
+    public void scrollToAndClickCreateAccountButton() 
+    {
+        wait.until(ExpectedConditions.visibilityOf(createAccountButton));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", createAccountButton);
+        wait.until(ExpectedConditions.elementToBeClickable(createAccountButton));
+        createAccountButton.click();
+    }
     
 
-    //methods to check if the blank error messages are displayed using explicit wait
-    public boolean isCompanyNameBlankErrorMessageDisplayed()
+    //methods to check if the  error messages are displayed using explicit wait
+    public boolean isCompanyNameErrorMessageDisplayed()
     {
-        wait.until(ExpectedConditions.visibilityOf(companyNameBlankErrorMessage));
-        return companyNameBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(companyNameErrorMessage));
+        return companyNameErrorMessage.isDisplayed();
     }
-    public boolean isFirstNameBlankErrorMessageDisplayed()
+    
+    //get the company name error message text
+    public String getCompanyNameErrorMessage()
     {
-        wait.until(ExpectedConditions.visibilityOf(firstNameBlankErrorMessage));
-        return firstNameBlankErrorMessage.isDisplayed();
-    }
-    public boolean isLastNameBlankErrorMessageDisplayed()
-    {
-        wait.until(ExpectedConditions.visibilityOf(lastNameBlankErrorMessage));
-        return lastNameBlankErrorMessage.isDisplayed();
-    }
-    public boolean isTelephoneBlankErrorMessageDisplayed()
-    {
-        wait.until(ExpectedConditions.visibilityOf(telephoneBlankErrorMessage));
-        return telephoneBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(companyNameErrorMessage));
+        return companyNameErrorMessage.getText();
     }
 
-    public boolean isStreetAddress1BlankErrorMessageDisplayed()
+    public boolean isFirstNameErrorMessageDisplayed()
     {
-        wait.until(ExpectedConditions.visibilityOf(streetAddress1BlankErrorMessage));
-        return streetAddress1BlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(firstNameErrorMessage));
+        return firstNameErrorMessage.isDisplayed();
     }
 
-    public boolean isCityBlankErrorMessageDisplayed()
+    //get the first name  error message text
+    public String getFirstNameErrorMessage()
     {
-        wait.until(ExpectedConditions.visibilityOf(cityBlankErrorMessage));
-        return cityBlankErrorMessage.isDisplayed();
-    }
-    public boolean isPostCodeBlankErrorMessageDisplayed()
-    {
-        wait.until(ExpectedConditions.visibilityOf(postCodeBlankErrorMessage));
-        return postCodeBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(firstNameErrorMessage));
+        return firstNameErrorMessage.getText();
     }
 
-    public boolean isEmailAddressBlankErrorMessageDisplayed()
+    //get the last name error message text
+    public String getLastNameErrorMessage()
     {
-        wait.until(ExpectedConditions.visibilityOf(emailAddressBlankErrorMessage));
-        return emailAddressBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(lastNameErrorMessage));
+        return lastNameErrorMessage.getText();
     }
 
-    public boolean isPasswordBlankErrorMessageDisplayed()
+    public boolean isLastNameErrorMessageDisplayed()
     {
-        wait.until(ExpectedConditions.visibilityOf(passwordBlankErrorMessage));
-        return passwordBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(lastNameErrorMessage));
+        return lastNameErrorMessage.isDisplayed();
     }
+
+
+    public boolean isTelephoneErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(telephoneErrorMessage));
+        return telephoneErrorMessage.isDisplayed();
+    }
+
+    public String getTelephoneErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(telephoneErrorMessage));
+        return telephoneErrorMessage.getText();
+    }
+
+    public boolean isStreetAddress1ErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(streetAddress1ErrorMessage));
+        return streetAddress1ErrorMessage.isDisplayed();
+    }
+
+    //get the street address 1 error message text
+    public String getStreetAddress1ErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(streetAddress1ErrorMessage));
+        return streetAddress1ErrorMessage.getText();
+    }
+
+
+    public boolean isCityErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(cityErrorMessage));
+        return cityErrorMessage.isDisplayed();
+    }
+
+    //get the city error message text
+    public String getCityErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(cityErrorMessage));
+        return cityErrorMessage.getText();
+    }
+
+    //is the state dropdown error message displayed
+    public boolean isStateErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(stateErrorMessage));
+        return stateErrorMessage.isDisplayed();
+    }
+
+    //get the state error message text
+    public String getStateErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(stateErrorMessage));
+        return stateErrorMessage.getText();
+    }
+
+
+
+    public boolean isPostCodeErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(postCodeErrorMessage));
+        return postCodeErrorMessage.isDisplayed();
+    }
+
+    //get the post code error message text
+    public String getPostCodeErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(postCodeErrorMessage));
+        return postCodeErrorMessage.getText();
+    }
+
+
+
+    public boolean isEmailAddressErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(emailAddressErrorMessage));
+        return emailAddressErrorMessage.isDisplayed();
+    }
+
+    public String getEmailAddressErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(emailAddressErrorMessage));
+        return emailAddressErrorMessage.getText();
+    }
+
+
+    public boolean isPasswordErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(passwordErrorMessage));
+        return passwordErrorMessage.isDisplayed();
+    }
+    
+    //get the password error message text
     public String getPasswordErrorMessage()
     {
-        wait.until(ExpectedConditions.visibilityOf(passwordBlankErrorMessage));
-        return passwordBlankErrorMessage.getText();
+        wait.until(ExpectedConditions.visibilityOf(passwordErrorMessage));
+        return passwordErrorMessage.getText();
     }
-    public boolean isConfirmPasswordBlankErrorMessageDisplayed()
+
+
+    public boolean isConfirmPasswordErrorMessageDisplayed()
     {
-        wait.until(ExpectedConditions.visibilityOf(confirmPasswordBlankErrorMessage));
-        return confirmPasswordBlankErrorMessage.isDisplayed();
+        wait.until(ExpectedConditions.visibilityOf(confirmPasswordErrorMessage));
+        return confirmPasswordErrorMessage.isDisplayed();
     }
 
-
+    public String getConfirmPasswordErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(confirmPasswordErrorMessage));
+        return confirmPasswordErrorMessage.getText();
+    }
 
     
     
