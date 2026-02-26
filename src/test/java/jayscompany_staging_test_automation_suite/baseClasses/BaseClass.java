@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import java.util.Base64;
@@ -97,8 +97,14 @@ public class BaseClass implements DriverProvider
         driver = new ChromeDriver(options);
         driver.manage().deleteAllCookies();
         //driver = new ChromeDriver();
+        
+        
         // Maximize the browser window
-        driver.manage().window().maximize();
+        
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        //driver.manage().window().maximize();
+
+
         // Clear all cookies to ensure a clean session
         driver.manage().deleteAllCookies();
 

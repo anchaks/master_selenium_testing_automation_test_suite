@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -84,7 +85,10 @@ public class BaseClass
         String url = properties.getProperty("appURL");
         log.info("Website url: {}", url);
         driver.get(url);
-        driver.manage().window().maximize();
+
+        // Maximize the browser window
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        //driver.manage().window().maximize();
         //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
     @AfterClass
