@@ -206,8 +206,54 @@ public class TC_02_Create_Account_Form_Validations extends BaseClass
             Assert.fail("Confirm password match validation is not working.");
         }
 
-        
+        log.info("=====CONFIRM PASSWORD MATCH VALIDATION COMPLETED=====");
 
+
+        log.info("=====DUPLICATE ACCOUNT VALIDATION STARTED=====");
+        createAccountPage.enterCompanyName("Test Company");
+        log.info("Entering company name: Test Company");
+        createAccountPage.enterFirstName("Test");
+        log.info("Entering first name: Test");
+        createAccountPage.enterLastName("User");
+        log.info("Entering last name: User");
+        createAccountPage.enterTelephone("1234567890");
+        log.info("Entering telephone: 1234567890");
+        createAccountPage.enterCity("Test City");
+        log.info("Entering city: Test City");
+        createAccountPage.enterStreetAddress("123 Test Street");
+        log.info("Entering street address: 123 Test Street");
+        createAccountPage.selectState("Iowa");
+        log.info("Selecting state: Iowa");
+        createAccountPage.enterPostCode("50131");
+        log.info("Entering post code: 50131");
+        createAccountPage.enterEmailAddress(properties.getProperty("front_end_user"));
+        log.info("Entering email address: {}", properties.getProperty("front_end_user"));
+        createAccountPage.enterPassword(properties.getProperty("front_end_user_password"));
+        log.info("Entering password: {}", properties.getProperty("front_end_user_password"));
+        createAccountPage.enterConfirmPassword(properties.getProperty("front_end_user_password"));
+        log.info("Entering confirm password: {}", properties.getProperty("front_end_user_password"));
+        createAccountPage.scrollToAndClickCreateAccountButton();
+        log.info("Submitting the create account form with existing email address to check for duplicate account validation.");
+
+        log.info("=====Checking for duplicate account error message after submitting the form with existing email address=====");
+        String duplicateAccountErrorText = createAccountPage.getDuplicateAccountErrorMessage();
+        log.info("Duplicate Account Error Message: {}", duplicateAccountErrorText);
+        if(createAccountPage.isDuplicateAccountErrorMessageDisplayed())
+        {
+            log.info("Duplicate account validation is working as expected.");
+            //print the error message in the logs
+            log.info("Duplicate account error message displayed: {}", duplicateAccountErrorText);
+            
+        }
+        else
+        {
+            log.error("Duplicate account validation is not working.");
+            Assert.fail("Duplicate account validation is not working.");
+        }
+
+
+
+        log.info("=====DUPLICATE ACCOUNT VALIDATION COMPLETED=====");
 
         log.info("=====CREATE ACCOUNT FORM VALIDATIONS TEST COMPLETED======");
 

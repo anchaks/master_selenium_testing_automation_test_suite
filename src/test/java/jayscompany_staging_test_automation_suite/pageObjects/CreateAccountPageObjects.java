@@ -408,6 +408,18 @@ public class CreateAccountPageObjects
     }
 
     
-    
+    //get the top error
+    @FindBy(xpath="//div[@class='message-text']") WebElement topErrorMessage;
+    public String getTopErrorMessage()
+    {
+        wait.until(ExpectedConditions.visibilityOf(topErrorMessage));
+        return topErrorMessage.getText();
+    }
+
+    public boolean isTopErrorMessageDisplayed()
+    {
+        wait.until(ExpectedConditions.visibilityOf(topErrorMessage));
+        return topErrorMessage.isDisplayed();
+    }
 
 }
